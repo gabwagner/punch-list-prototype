@@ -1,0 +1,173 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+#punchlist-container * {
+  box-sizing:border-box;
+  margin:0;
+}
+
+#punchlist-container {
+  font-family:helvetica neue,helvetica,arial,sans-serif;
+  font-size:18px;
+  line-height:18px;
+}
+
+#punchlist-container h1 {
+  text-align:center;
+  padding:50px 0;
+  font-size:30px;
+  margin:0;
+  font-weight:200;
+  color:#454545;
+}
+
+#punchlist-container h1 .fa-check {
+  font-size:30px;
+  margin-right:10px;
+  color:#0eb0b7;
+}
+
+#punchlist-items-container {
+  width:500px;
+  margin:0 auto 50px auto;
+  padding:50px;
+  background:white;
+  position:relative;
+  /*box-shadow*/
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+     -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+          box-shadow:0 1px 4px rgba(0, 0, 0, 0.3);
+  /*border-radius*/
+  -webkit-border-radius:5px;
+     -moz-border-radius:5px;
+          border-radius:5px;
+}
+
+#punchlist-items {
+
+}
+
+.punchlist-item {
+  display:flex;
+  position:relative;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.punchlist-item:hover .punchlist-item-action {
+  opacity:1;
+}
+
+.punchlist-item .punchlist-item-action:hover {
+  color:#cd4400;
+}
+
+
+.punchlist-item-label {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding:10px 5px;  
+  height:37px;
+}
+
+.punchlist-item-action {
+  flex-basis: 22px;
+  width:22px;
+  text-align:center;
+  color:#d8d8d8;
+  opacity:0;
+  padding:10px 5px;    
+  height:37px;
+}
+
+.punchlist-item input[type="checkbox"]{
+  display:none;
+}
+
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f096";
+  letter-spacing: 4px;
+  font-size:24px;
+  color: #d8d8d8;  
+}
+
+input[type=checkbox] + label:hover:before {
+  color: #010101;
+}
+
+input[type=checkbox]:checked + label:before {       
+  content: "\f046";
+  color: #0eb0b7;
+}
+
+:checked + .punchlist-item-label-text .punchlist-item-label-text-line {       
+  text-decoration:line-through;
+  color:#cd4400;
+}
+
+:checked + .punchlist-item-label-text  .punchlist-item-label-text-data {       
+  color:#d8d8d8;
+}
+
+.comment {
+  display:block;
+  position:relative;
+  padding-left:36px;
+  font-size: 13px;
+  color:grey;
+  line-height: 24px;
+  border-bottom: 1px solid #ebebeb;  
+}
+
+.comments.hidden .comment:not(:first-child) {
+  display:none;
+}
+
+.comment:nth-child(even) {
+  background: #EEE;
+}
+.comment:nth-child(odd) {
+  background: #FFF
+}
+
+.comment:last-of-type{
+    //line-height: 50px;
+}
+
+
+/* Add Items */
+#add-todo{
+  padding:25px 0 0 0;
+  font-size:14px;
+  font-weight:200;
+  color:#d8d8d8;
+  display:inline-block;
+  cursor:pointer;
+}
+
+#add-todo:hover {
+  color:#6bc569;
+}
+
+#add-todo .fa-plus{
+  font-size:14px;
+}
+
+.input-todo{
+  border:none;
+  outline:none;
+  font-weight:200;
+  position:relative;
+  top:-1px;
+  margin:0;
+  padding:0;
+  width:100%;
+}
+
+.editing{
+  height:0;
+  overflow:hidden;
+}
+
