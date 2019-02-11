@@ -1,95 +1,70 @@
-(function ( $ ) {
+;(function ( $, window, document, undefined ) {
   
-    var i=0;
-    
-    function convertToPunch(index, toConvert) {
-        var comments = [];
-        if(toConvert.comments.length>0) {
-            for(comment of toConvert.comments) {
-              comments.push({comment:comment})
-            }
-        } else {
-          comments.push({comment:"-- No comments --"});
-        }
-        return {id: index, idx: toConvert.id, todo:toConvert.item, checked: index ? 'checked' : '', comments:comments};
-    }
-    
-    const PunchList =`<div id="punchlist-title">
-        <h1><i class="fa fa-check"></i>Punch-List</h1>
-      </div>
-      <div id="punchlist-items-container">
-        <div id="punchlist-items">          
-        </div>
-        <div id="add-todo">
-          <i class="fa fa-plus"></i>
-          Add an Item
-        </div>        
-      </div>`
-        
-    const PunchListItem = ({ id, checked, todo }) =>  `<div class="punchlist-item">
-            <div class="punchlist-item-label">
-              <input type="checkbox" id="${id}" ${checked}/>
-              <label for="${id}" class="punchlist-item-label-text" title="${todo}">
-                <span class="punchlist-item-label-text-line">
-                  <span class="punchlist-item-label-text-data">${todo}</span>
-                </span>
-              </label>
+  var punchList = 'defaultPunchList',
+          defaults = {
+              title: "Punch-List",
+              apiCall: "json/response.json",
+              punchListContainerTemplate: ({ title }) => `<div id="punchlist-title">
+                <h1><i class="fa fa-check"></i>${title}</h1>
+              </div>
+              <div id="punchlist-items-container">
+                <div id="punchlist-items">          
+                </div>
+                <div id="add-todo">
+                  <i class="fa fa-plus"></i>
+                  Add an Item
+                </div>        
+              </div>`,
+              punchListItemTemplate: (item, index) =>  `<div class="punchlist-item">
+              <div class="punchlist-item-label">
+                <input type="checkbox" id="${index}" />
+                <label for="${index}" class="punchlist-item-label-text" title="${item.item}">
+                  <span class="punchlist-item-label-text-line">
+                    <span class="punchlist-item-label-text-data">${item.item}</span>
+                  </span>
+                </label>
+              </div>
+              <div class="punchlist-item-action" title="comments">
+                <i class="fa fa-comment"></i>
+              </div>
+              <div class="punchlist-item-action" title="remove">
+                <i class="fa fa-times-circle"></i>
+              </div>
             </div>
-            <div class="punchlist-item-action" title="comments">
-              <i class="fa fa-comment"></i>
+            <div class="comments hidden">
+               ${item.comments.map( comment => `<span class="comment">${comment.comment}</span>`).join('')}
             </div>
-            <div class="punchlist-item-action" title="remove">
-              <i class="fa fa-times-circle"></i>
-            </div>
-          </div>`
-    
-    const PunchListItemEditing = ({ id }) =>  `<div class="punchlist-item">
-            <div class="punchlist-item-label">
-              <input type="checkbox" id="${id}"/>
-              <label for="${id}" class="punchlist-item-label-text">
-                <span class="punchlist-item-label-text-line">
-                  <span class="punchlist-item-label-text-data"><input type="text" id="input-todo${id}" class="input-todo"></span>
-                </span>
-              </label>
-            </div>
-            <div class="punchlist-item-action" title="comments">
-              <i class="fa fa-comment"></i>
-            </div>
-            <div class="punchlist-item-action" title="remove">
-              <i class="fa fa-times-circle"></i>
-            </div>
-          </div><div></div>`
-          
-    const PunchListItemComment = ({ comment }) =>  `
-                <span class="comment">
-                ${comment}
-                </span>
-          `;
-     
- 
-    $.fn.punchList = function() {
-      
-      $(this).html(PunchList);
-      
-      var punchlist_items = $(this).find('#punchlist-items');
-        
-      $.getJSON("json/response.json", function(result){
-        
-         for(var item of result) {
-            var punchItem = convertToPunch(i,item);
-            var html_item = [punchItem].map(PunchListItem).join('');
-            punchlist_items.append(html_item);
-            var comments = $(document.createElement('div'));
-            comments.addClass("comments hidden");
-            for(var comment of item.comments) {
-              var html_item_comment = [comment].map(PunchListItemComment).join('');
-              comments.append(html_item_comment);
-            }
-            punchlist_items.append(comments);
-            i++;
-         }
-         
-         $('.fa-times-circle').click(function(){
+            `,
+              punchListItemCommentTemplate: ({ comment }) =>  `<span class="comment">${comment}</span>`           
+            };
+
+  function PunchList( element, options ) {    
+    this.element = element;
+    this.options = $.extend( {}, defaults, options) ;
+    this._defaults = defaults;
+    this._name = punchList;
+    this._index = 0;
+    this.init();
+  }          
+
+  PunchList.prototype.init = function() {
+    var htmlPunchListContainer = [{title: this.options.title}].map(this.options.punchListContainerTemplate).join('');
+    $(this.element).html(htmlPunchListContainer);
+    // TODO: Exception management for call 
+    var self = this;
+    $.getJSON(this.options.apiCall, function(items) { 
+      self.index = items.length;
+      self.drawItems(items);
+    });
+    /* Adding Add Behaviour */
+  }
+  
+  PunchList.prototype.drawItems = function(items) {
+    var htmlPunchListContainer = items.map(this.options.punchListItemTemplate).join('');
+    var punchlist_items = $(this.element).find('#punchlist-items');
+    punchlist_items.html(htmlPunchListContainer);    
+    /* Adding Behaviour */
+    $(this.element).find('.fa-times-circle').click(function(){
           var parentItem = $(this).parent().parent();
           $(parentItem).next().remove();
           parentItem.animate({
@@ -102,20 +77,24 @@
           }, 1000);
         });        
 
-         
-        $('.fa-comment').click(function(){
-          var parentItem = $(this).parent().parent();
-          $(parentItem).next().toggleClass('hidden');
-        });
-      });        
+    $(this.element).find('.fa-comment').click(function(){
+      var parentItem = $(this).parent().parent();
+      $(parentItem).next().toggleClass('hidden');
+    });
+  }
+  
+  $.fn.punchList = function ( options ) {
+      return new PunchList( this, options );
+  }
+  
+})( jQuery, window, document );
+
+/*
+(function ( $ ) {
         
       $('#add-todo').click(function(){
         i++;
-        
         var newId = i;
-        
-        
-        
         var html_item = [{id:newId}].map(PunchListItemEditing).join('');
         
         punchlist_items.append(html_item);
@@ -172,4 +151,4 @@
       })
   }
  
-}( jQuery ));
+}( jQuery ));*/
