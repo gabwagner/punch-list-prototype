@@ -1,5 +1,3 @@
-@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-
 #punchlist-container * {
   box-sizing:border-box;
 }
@@ -41,10 +39,6 @@
           border-radius:5px;
 }
 
-#punchlist-items {
-
-}
-
 .punchlist-item {
   display:flex;
   position:relative;
@@ -82,7 +76,6 @@
 .punchlist-item input[type="checkbox"]{
   display:none;
 }
-
 .punchlist-item-tags {
   display:flex;
   position:relative;
@@ -92,6 +85,10 @@
   color:grey;
   line-height: 24px;
   border-bottom: 1px solid #ebebeb;  
+}
+
+.punch-item-add .punchlist-item-tags {
+  display:none;
 }
 
 .punchlist-item-tag {
@@ -163,7 +160,6 @@ input[type=checkbox]:checked + label:before {
     //line-height: 50px;
 }
 
-
 /* Add Items */
 #add-todo{
   padding:25px 0 0 0;
@@ -181,20 +177,3 @@ input[type=checkbox]:checked + label:before {
 #add-todo .fa-plus{
   font-size:14px;
 }
-
-.input-todo{
-  border:none;
-  outline:none;
-  font-weight:200;
-  position:relative;
-  top:-1px;
-  margin:0;
-  padding:0;
-  width:100%;
-}
-
-.editing{
-  height:0;
-  overflow:hidden;
-}
-
