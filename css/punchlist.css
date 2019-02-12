@@ -109,9 +109,9 @@
 }
 
 input[type=checkbox] + label:before {
-  font-family: FontAwesome;
+  font-family: "Font Awesome 5 Free";
   display: inline-block;
-  content: "\f096";
+  content: "\f0c8";
   letter-spacing: 4px;
   font-size:24px;
   color: #d8d8d8;  
@@ -122,7 +122,7 @@ input[type=checkbox] + label:hover:before {
 }
 
 input[type=checkbox]:checked + label:before {       
-  content: "\f046";
+  content: "\f14a";
   color: #0eb0b7;
 }
 
