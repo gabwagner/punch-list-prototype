@@ -15,27 +15,33 @@
                   Add an Item
                 </div>        
               </div>`,
-              punchListItemTemplate: (item, index) =>  `<div class="punchlist-item">
-              <div class="punchlist-item-label">
-                <input type="checkbox" id="${index}" />
-                <label for="${index}" class="punchlist-item-label-text" title="${item.item}">
-                  <span class="punchlist-item-label-text-line">
-                    <span class="punchlist-item-label-text-data">${item.item}</span>
-                  </span>
-                </label>
+              punchListItemTemplate: (item, index) =>  `<div id="item-${index}">
+                <div class="punchlist-item">
+                  <div class="punchlist-item-label">
+                    <input type="checkbox" id="${index}" ${item.index ? 'checked': ''}/>
+                    <label for="${index}" class="punchlist-item-label-text" title="${item.item}">
+                      <span class="punchlist-item-label-text-line">
+                        <span class="punchlist-item-label-text-data">${item.item}</span>
+                      </span>
+                    </label>
+                  </div>
+                  <div class="punchlist-item-action" title="comments">
+                    <i class="fa fa-comment"></i>
+                  </div>
+                  <div class="punchlist-item-action" title="remove">
+                    <i class="fa fa-times-circle"></i>
+                  </div>
+                </div>
+                <div class="punchlist-item-tags">
+                  <div class="punchlist-item-tag">Company: ${item.company}</div>
+                  <div class="punchlist-item-tag">Project: ${item.project}</div>
+                  <div class="punchlist-item-tag">User: ${item.user}</div>
+                </div>
+                <div class="comments hidden">
+                   ${item.comments.map( comment => `<div class="comment">${comment.comment}<div class="punchlist-comment-tag">User: ${comment.user}</div></div>`).join('')}
+                </div>
               </div>
-              <div class="punchlist-item-action" title="comments">
-                <i class="fa fa-comment"></i>
-              </div>
-              <div class="punchlist-item-action" title="remove">
-                <i class="fa fa-times-circle"></i>
-              </div>
-            </div>
-            <div class="comments hidden">
-               ${item.comments.map( comment => `<span class="comment">${comment.comment}</span>`).join('')}
-            </div>
-            `,
-              punchListItemCommentTemplate: ({ comment }) =>  `<span class="comment">${comment}</span>`           
+            `,       
             };
 
   function PunchList( element, options ) {    
@@ -53,10 +59,24 @@
     // TODO: Exception management for call 
     var self = this;
     $.getJSON(this.options.apiCall, function(items) { 
-      self.index = items.length;
+      self._index = items.length;
       self.drawItems(items);
     });
     /* Adding Add Behaviour */
+    $('#add-todo').click(function(){ self.addItem() });
+    
+  }
+  
+  PunchList.prototype.addItem = function() {
+    this._index++;
+    var punchlist_items = $(this.element).find('#punchlist-items');
+    var new_item_html = $.map({ [this._index]:{index:false, item:'',comments:[]}},this.options.punchListItemTemplate).join('');
+    var newItem = $(new_item_html).appendTo(punchlist_items);
+    /*
+    var newItem = $([],$(punchlist_items)[0].ownerDocument);
+    
+    punchlist_items.append(newItem);
+    */
   }
   
   PunchList.prototype.drawItems = function(items) {
@@ -65,8 +85,7 @@
     punchlist_items.html(htmlPunchListContainer);    
     /* Adding Behaviour */
     $(this.element).find('.fa-times-circle').click(function(){
-          var parentItem = $(this).parent().parent();
-          $(parentItem).next().remove();
+          var parentItem = $(this).parent().parent().parent();
           parentItem.animate({
             left:"-30%",
             height:0,
@@ -78,8 +97,8 @@
         });        
 
     $(this.element).find('.fa-comment').click(function(){
-      var parentItem = $(this).parent().parent();
-      $(parentItem).next().toggleClass('hidden');
+      var parentItem = $(this).parent().parent().parent();
+      $(parentItem).find('.comments').toggleClass('hidden');
     });
   }
   

@@ -2,7 +2,6 @@
 
 #punchlist-container * {
   box-sizing:border-box;
-  margin:0;
 }
 
 #punchlist-container {
@@ -82,6 +81,34 @@
 
 .punchlist-item input[type="checkbox"]{
   display:none;
+}
+
+.punchlist-item-tags {
+  display:flex;
+  position:relative;
+  border-bottom: 1px solid #ebebeb;
+  padding-left:36px;
+  font-size: 13px;
+  color:grey;
+  line-height: 24px;
+  border-bottom: 1px solid #ebebeb;  
+}
+
+.punchlist-item-tag {
+  border-radius: 5px;
+  background: #73AD21;
+  margin-left: 2px;
+  padding: 3px; 
+  color: #FFFFFF;
+}
+
+.punchlist-comment-tag {
+  width: auto;
+  border-radius: 5px;
+  background: #616161;
+  margin: 2px;
+  padding: 3px; 
+  color: #FFFFFF;
 }
 
 input[type=checkbox] + label:before {
