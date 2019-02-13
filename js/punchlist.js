@@ -20,6 +20,7 @@
                   <div class="punchlist-item-label">
                     <input type="checkbox" id="${index}" ${item.index ? 'checked': ''}/>
                     <label for="${index}" class="punchlist-item-label-text" title="${item.item}">
+                      <i class="fa fa-check"></i> 
                       <span class="punchlist-item-label-text-line">
                         <span class="punchlist-item-label-text-data">${item.item}</span>
                       </span>
@@ -36,12 +37,21 @@
                   <div class="punchlist-item-tag">Company: ${item.company}</div>
                   <div class="punchlist-item-tag">Project: ${item.project}</div>
                   <div class="punchlist-item-tag">User: ${item.user}</div>
+                  <div class="punchlist-item-tag">Date: ${new Date(item.datetime).toLocaleString()}</div>
                 </div>
                 <div class="comments hidden">
-                   ${item.comments.map( comment => `<div class="comment">${comment.comment}<div class="punchlist-comment-tag">User: ${comment.user}</div></div>`).join('')}
+                   ${item.comments.map( comment => `<div class="comment"><div class="comment-text">${comment.comment}</div><div class="punchlist-comment-tag">User: ${comment.user} - Date:${new Date(comment.datetime).toLocaleString()}</div></div>`).join('')}
+                </div>
+                <div class="add-item-comment">
+                  <i class="fa fa-plus"></i>
+                  Add Comment
                 </div>
               </div>
-            `,       
+            `,
+            punchListCommentTemplate: (comment) =>  `<div class="comment">
+                  <div class="comment-text">${comment.comment}</div>
+                  <div class="punchlist-comment-tag">User: ${comment.user} - Date:${new Date(comment.datetime).toLocaleString()}</div>
+              </div>`
             };
 
   function PunchList( element, options ) {    
@@ -68,47 +78,62 @@
     
   }
   
+  PunchList.prototype.addComment = function(item) {
+    var comments = item.find('.comments');
+    var new_comment_html = $.map([{comment:'', user:'Me', datetime:new Date().toString()}],this.options.punchListCommentTemplate).join('');
+    var newItem = $(new_comment_html).prependTo(comments);
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'punch-item-comment';
+    var toAppendInput = newItem.find('.comment-text');
+    var input = $(input).appendTo(toAppendInput);
+    input.focus();    
+    var self = this;
+    input.enterKey(function(){
+      $(this).trigger('enterEvent');
+    });
+    input.on('blur enterEvent',function(){
+      var itemComment = input.val();
+      var itemCommentLength = itemComment.length;
+      if (itemCommentLength > 0) {
+        // TODO: Add new item handler
+        $(this).parent().html(itemComment);
+      } else {
+        newItem.remove();
+      }
+    });    
+  }
+  
   PunchList.prototype.addItem = function() {
-    if(!this._adding) {
-      this._adding = true;
-      this._index++;
-      var punchlist_items = $(this.element).find('#punchlist-items');
-      var new_item_html = $.map({ [this._index]:{index:false, item:'',comments:[]}},this.options.punchListItemTemplate).join('');
-      var newItem = $(new_item_html).appendTo(punchlist_items);
-      
-      newItem.find('.punchlist-item-tags').remove();
-      
-      var toAppendInput = newItem.find('.punchlist-item-label-text-data');
-      
-      var input = document.createElement('input');
-      input.type = 'text';
-      input.id = 'punch-item' + this._index;
-      
-      var input = $(input).appendTo(toAppendInput);
-      
-      input.focus();
-      
-      var self = this;
-      
-      input.enterKey(function(){
-        $(this).trigger('enterEvent');
-      });
-            
-      input.on('blur enterEvent',function(){
-        var todoTitle = input.val();
-        var todoTitleLength = todoTitle.length;
-        if (todoTitleLength > 0) {
-          // TODO: Add new item handler
-          $(this).parent().html(todoTitle);
-          newItem.find('.fa-times-circle').click( function(){
-            self.removeItem(newItem);
-          });
-        } else {
-          newItem.remove();
-        }
-        self._adding = false;
-      });
-    }
+    this._adding = true;
+    this._index++;
+    var punchlist_items = $(this.element).find('#punchlist-items');
+    var new_item_html = $.map({ [this._index]:{index:false, item:'',comments:[]}},this.options.punchListItemTemplate).join('');
+    var newItem = $(new_item_html).appendTo(punchlist_items);
+    newItem.find('.punchlist-item-tags').remove();
+    var toAppendInput = newItem.find('.punchlist-item-label-text-data');
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.id = 'punch-item';
+    var input = $(input).appendTo(toAppendInput);
+    input.focus();
+    var self = this;
+    input.enterKey(function(){
+      $(this).trigger('enterEvent');
+    });
+    input.on('blur enterEvent',function(){
+      var todoTitle = input.val();
+      var todoTitleLength = todoTitle.length;
+      if (todoTitleLength > 0) {
+        // TODO: Add new item handler
+        $(this).parent().html(todoTitle);
+        newItem.find('.fa-times-circle').click( function(){
+          self.removeItem(newItem);
+        });
+      } else {
+        newItem.remove();
+      }
+    });
   }
 
   PunchList.prototype.removeItem = function(item) {
@@ -131,14 +156,18 @@
     var self = this;
     
     $(this.element).find('.fa-times-circle').click( function(){
-          var parentItem = $(this).parent().parent().parent();
-          self.removeItem(parentItem);
+        var parentItem = $(this).parent().parent().parent();
+        self.removeItem(parentItem);
     });
     
     $(this.element).find('.fa-comment').click(function(){
       var parentItem = $(this).parent().parent().parent();
       $(parentItem).find('.comments').toggleClass('hidden');
     });
+    
+    $(this.element).find('.add-item-comment').click(function(){
+      self.addComment($(this).parent());
+    });    
   }
   
   $.fn.punchList = function ( options ) {
