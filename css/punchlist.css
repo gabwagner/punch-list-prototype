@@ -69,6 +69,7 @@
   opacity:0;
   padding:10px 5px;    
   height:37px;
+  cursor: pointer;
 }
 
 .punchlist-item input[type="checkbox"]{
@@ -114,6 +115,7 @@
   padding:10px 5px;
   height:37px;
   position:relative;
+  cursor: pointer;
 }
 
 .punchlist-item-label-text:before {
@@ -198,7 +200,10 @@
   background: #EEE;
 }
 .comment:nth-child(odd) {
-  background: #FFF
+  background: #FFF;
+}
+.comment-action {
+  cursor:pointer;
 }
 
 /* Add Item Comment */
@@ -219,7 +224,7 @@
   font-size:14px;
 }
 /* Add Item */
-#add-todo{
+#add-item{
   padding:25px 0 0 0;
   font-size:14px;
   font-weight:200;
@@ -228,16 +233,10 @@
   cursor:pointer;
 }
 
-#add-todo:hover {
+#add-item:hover {
   color:#6bc569;
 }
 
-#add-todo .fa-plus{
+#add-item .fa-plus{
   font-size:14px;
-}
-/* */
-#punch-item-comment {
-  width: 100%;
-  font-size: 13px;
-  height:18px;
 }
