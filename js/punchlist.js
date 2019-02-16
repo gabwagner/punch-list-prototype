@@ -170,7 +170,7 @@
             if(self.options.removeItemHandler(parentItem.attr('id'), parentItem.data('item'))) {
               self.removeItem(parentItem);
             } else {
-              console.log("Item could not be removed - check handler removeItemHandler");
+              console.warn("Item could not be removed - check handler removeItemHandler");
             }
         } else {
           self.removeItem(parentItem);
@@ -189,9 +189,8 @@
     item.find('input[type=checkbox]').change(function() {
         if(self.options.checkedItemHandler) {
             var parentItem = $(this).parent().parent().parent();
-            console.log(parentItem.html());
             if(!self.options.checkedItemHandler(parentItem.attr('id'), parentItem.data('item'), $(this).prop("checked"))) {
-              console.log("Item could not change state - check handler checkedItemHandler");
+              console.warn("Item could not change state - check handler checkedItemHandler");
               $(this).prop("checked", !$(this).prop("checked"));
             }
         }
@@ -256,7 +255,7 @@
       var todoTitleLength = todoTitle.length;
       if (todoTitleLength > 0) {
         if(self.options.addItemHandler&&!self.options.addItemHandler(newItem.attr('id'), input.val())) {
-          console.log("Item could not be added - check handler addItemHandler");
+          console.warn("Item could not be added - check handler addItemHandler");
           newItem.remove();
         } else {
            $(this).parent().html(todoTitle);
