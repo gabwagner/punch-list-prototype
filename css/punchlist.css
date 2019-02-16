@@ -7,6 +7,8 @@
   font-size:18px;
   line-height:18px;
   border: 1px solid #e0e0e0;
+  background-color: #ebebeb;
+  min-width: 300px;
 }
 
 .punchlist-title h1 {
@@ -23,11 +25,16 @@
 }
 
 #punchlist-items-container {
-  margin:0 auto 50px auto;
-  padding:50px;
+  margin:0 auto 0 auto;
+  padding:15px;
   background:white;
   position:relative;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #efefef;
+  background-color: #efefef;
+}
+
+#punchlist-items {
+  background-color: #ffffff;
 }
 
 .punchlist-item {
@@ -59,7 +66,8 @@
   text-align:center;
   color:#d8d8d8;
   opacity:0;
-  padding:10px 5px;    
+  padding: 5px;   
+  margin-right: 5px;
   height:37px;
   cursor: pointer;
 }
@@ -108,6 +116,8 @@
   height:37px;
   position:relative;
   cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;  
 }
 
 .punchlist-item-label-text:before {
