@@ -9,6 +9,7 @@
   border: 1px solid #e0e0e0;
   background-color: #ebebeb;
   min-width: 300px;
+  border-radius: 5px;
 }
 
 .punchlist-title h1 {
@@ -31,10 +32,12 @@
   position:relative;
   border: 1px solid #efefef;
   background-color: #efefef;
+  border-radius: 5px;  
 }
 
 #punchlist-items {
   background-color: #ffffff;
+  border-radius: 5px;
 }
 
 .punchlist-item {
@@ -85,6 +88,7 @@
   color:grey;
   line-height: 24px;
   background: #616161;
+  border-radius: 5px;
 }
 
 .punch-item-add .punchlist-item-tags {
@@ -107,6 +111,10 @@
   margin: 2px;
   padding: 3px; 
   color: #FFFFFF;
+}
+
+.punchlist-comment-tag:empty {
+  display:none;
 }
 
 .punchlist-item-label-text {
@@ -150,6 +158,10 @@
   height:36px;
   text-align:center;
   color: #d8d8d8;
+}
+
+.punchlist-item-comment-action-remove {
+  margin-left: 5px;
 }
 
 .punchlist-item-label-text:hover:before{
@@ -209,12 +221,12 @@
   display:inline;
 }
 
-.comment-action {
+.punchlist-item-comment-action-remove {
   cursor:pointer;
 }
 
 /* Add Item Comment */
-.add-item-comment{
+.punchlist-item-comment-action-add{
   padding-left:36px;
   font-size:14px;
   font-weight:200;
@@ -223,27 +235,27 @@
   cursor:pointer;
 }
 
-.add-item-comment{
+.punchlist-item-comment-action-add {
   color:#6bc569;
 }
 
-.add-item-comment{
+.punchlist-item-comment-action-add {
   font-size:14px;
 }
 /* Add Item */
-#add-item{
+#punchlist-item-action-add {
   padding:25px 0 0 0;
   font-size:14px;
   font-weight:200;
-  color:#d8d8d8;
+  color:#c0c0c0;
   display:inline-block;
   cursor:pointer;
 }
 
-#add-item:hover {
+#punchlist-item-action-add:hover {
   color:#6bc569;
 }
 
-#add-item .fa-plus{
+#punchlist-item-action-add .fa-plus{
   font-size:14px;
 }
